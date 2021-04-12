@@ -1,5 +1,16 @@
 version: '3'
 services:
+  app:
+    build: .
+    image: product-service
+    container_name: product_service_app
+    depends_on:
+      - db
+    ports:
+    - 8080:8080
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+
   db:
     image: postgres:13
     container_name: product_service_db

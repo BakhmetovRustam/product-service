@@ -3,7 +3,7 @@ spring:
   data.rest:
     basePath: /api
   datasource:
-    url: jdbc:postgresql://localhost:6543/@project.artifactId@
+    url: jdbc:postgresql://db:5432/@project.artifactId@
     username: postgres
     password: postgres
   http:
