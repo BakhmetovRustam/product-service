@@ -43,3 +43,4 @@ $ curl http://localhost:8080/api
 The API also exposes endpoints to search and/or filter:
 
 - GET `/api/products/search/names?name={name}`, to search a product by its name
+- GET `/api/products/search/categories?category={category}`, to search a product category

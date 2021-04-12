@@ -1,5 +1,6 @@
 package com.brunocesar.product.repository;
 
+import com.brunocesar.product.model.Category;
 import com.brunocesar.product.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +14,8 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
 
     @RestResource(path = "names", rel = "names")
     Page<Product> findByNameContains(@Param("name") String name, Pageable pageable);
+
+    @RestResource(path = "categories", rel = "categories")
+    Page<Product> findByCategory(@Param("category") Category category, Pageable pageable);
 
 }

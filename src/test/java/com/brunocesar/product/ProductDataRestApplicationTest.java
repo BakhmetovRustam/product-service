@@ -178,6 +178,39 @@ public class ProductDataRestApplicationTest {
     }
 
     @Test
+    public void shouldFilterProductByCategory() throws Exception {
+        mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        mockMVC
+            .perform(get(PRODUCT_URL + "/search/categories?category=PCS"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.products").isArray())
+            .andExpect(jsonPath("$._embedded.products[0].name").exists())
+            .andExpect(jsonPath("$._embedded.products[0].description").hasJsonPath())
+            .andExpect(jsonPath("$._embedded.products[0].price").exists())
+            .andExpect(jsonPath("$._embedded.products[0].currency").exists())
+            .andExpect(jsonPath("$._embedded.products[0].category").exists())
+
+            .andExpect(jsonPath("$.page.size").value(20))
+            .andExpect(jsonPath("$.page.totalElements").value(2))
+            .andExpect(jsonPath("$.page.totalPages").value(1))
+            .andExpect(jsonPath("$.page.number").value(0))
+
+            .andExpect(jsonPath("$._links.first").doesNotExist())
+            .andExpect(jsonPath("$._links.prev").doesNotExist())
+            .andExpect(jsonPath("$._links.next").doesNotExist())
+            .andExpect(jsonPath("$._links.last").doesNotExist());
+    }
+
+    @Test
     public void shouldRetrieveProductWithDescription() throws Exception {
         var mvcResult = mockMVC
             .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
