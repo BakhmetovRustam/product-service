@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -28,7 +30,9 @@ public class ProductDataRestApplicationTest {
     private static final String PRODUCT_URL = API_URL + "/products";
 
     private static final String CREATE_PRODUCT_PAYLOAD = "{\"name\": \"Desmodur\", \"price\": 10.23, \"currency\": \"EUR\", \"category\": \"PCS\"}";
+    private static final String CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD = "{\"name\": \"Desmodur\", \"description\": \"Desmodur Description\", \"price\": 35.67, \"currency\": \"EUR\", \"category\": \"PCS\"}";
     private static final String UPDATE_PRODUCT_PAYLOAD = "{\"name\": \"MX50\", \"price\": 5.55, \"currency\": \"USD\", \"category\": \"CAS\"}";
+    private static final String UPDATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD = "{\"name\": \"MX50\", \"description\": \"MX50 Description\", \"price\": 5.55, \"currency\": \"USD\", \"category\": \"CAS\"}";
 
     @Autowired
     private MockMvc mockMVC;
@@ -72,7 +76,27 @@ public class ProductDataRestApplicationTest {
             .perform(get(location))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("Desmodur"))
+            .andExpect(jsonPath("$.description").value(is(nullValue())))
             .andExpect(jsonPath("$.price").value(10.23))
+            .andExpect(jsonPath("$.currency").value("EUR"))
+            .andExpect(jsonPath("$.category").value("PCS"));
+    }
+
+    @Test
+    public void shouldRetrieveProductWithDescription() throws Exception {
+        var mvcResult = mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        var location = mvcResult.getResponse().getHeader(HttpHeaders.LOCATION);
+
+        mockMVC
+            .perform(get(location))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Desmodur"))
+            .andExpect(jsonPath("$.description").value("Desmodur Description"))
+            .andExpect(jsonPath("$.price").value(35.67))
             .andExpect(jsonPath("$.currency").value("EUR"))
             .andExpect(jsonPath("$.category").value("PCS"));
     }
@@ -94,6 +118,30 @@ public class ProductDataRestApplicationTest {
             .perform(get(location))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("MX50"))
+            .andExpect(jsonPath("$.description").value(is(nullValue())))
+            .andExpect(jsonPath("$.price").value(5.55))
+            .andExpect(jsonPath("$.currency").value("USD"))
+            .andExpect(jsonPath("$.category").value("CAS"));
+    }
+
+    @Test
+    public void shouldUpdateProductWithDescription() throws Exception {
+        var mvcResult = mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        var location = mvcResult.getResponse().getHeader(HttpHeaders.LOCATION);
+
+        mockMVC
+            .perform(put(location).content(UPDATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isNoContent());
+
+        mockMVC
+            .perform(get(location))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("MX50"))
+            .andExpect(jsonPath("$.description").value("MX50 Description"))
             .andExpect(jsonPath("$.price").value(5.55))
             .andExpect(jsonPath("$.currency").value("USD"))
             .andExpect(jsonPath("$.category").value("CAS"));
@@ -116,7 +164,31 @@ public class ProductDataRestApplicationTest {
             .perform(get(location))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("Desmodur"))
+            .andExpect(jsonPath("$.description").value(is(nullValue())))
             .andExpect(jsonPath("$.price").value(12.65))
+            .andExpect(jsonPath("$.currency").value("EUR"))
+            .andExpect(jsonPath("$.category").value("PCS"));
+    }
+
+    @Test
+    public void shouldUpdateWithDescriptionProduct() throws Exception {
+        var mvcResult = mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        var location = mvcResult.getResponse().getHeader(HttpHeaders.LOCATION);
+
+        mockMVC
+            .perform(patch(location).content("{\"description\": \"Desmodur Description\"}"))
+            .andExpect(status().isNoContent());
+
+        mockMVC
+            .perform(get(location))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Desmodur"))
+            .andExpect(jsonPath("$.description").value("Desmodur Description"))
+            .andExpect(jsonPath("$.price").value(35.67))
             .andExpect(jsonPath("$.currency").value("EUR"))
             .andExpect(jsonPath("$.category").value("PCS"));
     }

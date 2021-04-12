@@ -40,6 +40,9 @@ public class Product implements Persistable<Long> {
     @Column(nullable = false, length = 200)
     private String name;
 
+    @Column(length = 500)
+    private String description;
+
     @Column(nullable = false)
     private BigDecimal price;
 
