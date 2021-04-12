@@ -1,11 +1,19 @@
 spring:
   application.name: @project.artifactId@
+  datasource:
+    url: jdbc:postgresql://localhost:6543/@project.artifactId@
+    username: postgres
+    password: postgres
   http:
     encoding.charset: @project.build.sourceEncoding@
     encoding.enabled: true
     encoding.force: true
   resources.add-mappings: false
   mvc.throw-exception-if-no-handler-found: true
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
   main:
     banner-mode: 'off'
     allow-bean-definition-overriding: true
