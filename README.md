@@ -27,7 +27,7 @@ $ curl http://localhost:8080/api
 {
   "links" : [ {
     "rel" : "products",
-    "href" : "http://localhost:8080/api/products"
+    "href" : "http://localhost:8080/api/products{?page,size,sort}"
   }, {
     "rel" : "profile",
     "href" : "http://localhost:8080/api/profile"
@@ -39,3 +39,7 @@ $ curl http://localhost:8080/api
 - GET `/api/products/{id}`, to get one product from the list
 - PUT `/api/products/{id}`, to update a single product
 - POST `/api/products`, to create a product
+
+The API also exposes endpoints to search and/or filter:
+
+- GET `/api/products/search/names?name={name}`, to search a product by its name
