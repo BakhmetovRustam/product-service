@@ -1,0 +1,26 @@
+spring:
+  application.name: @project.artifactId@
+  data.rest:
+    basePath: /api
+  http:
+    encoding.charset: @project.build.sourceEncoding@
+    encoding.enabled: true
+    encoding.force: true
+  resources.add-mappings: false
+  mvc.throw-exception-if-no-handler-found: true
+  flyway.enabled: false
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+  main:
+    banner-mode: 'off'
+    allow-bean-definition-overriding: true
+
+server:
+  servlet:
+    context-path: /
+    encoding:
+      charset: @project.build.sourceEncoding@
+      enabled: true
+      force: true
