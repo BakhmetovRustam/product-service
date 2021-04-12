@@ -64,6 +64,71 @@ public class ProductDataRestApplicationTest {
     }
 
     @Test
+    public void shouldListProducts() throws Exception {
+        mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        mockMVC
+            .perform(get(PRODUCT_URL))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.products").isArray())
+            .andExpect(jsonPath("$._embedded.products[0].name").value("Desmodur"))
+            .andExpect(jsonPath("$._embedded.products[0].description").value(is(nullValue())))
+            .andExpect(jsonPath("$._embedded.products[0].price").value(10.23))
+            .andExpect(jsonPath("$._embedded.products[0].currency").value("EUR"))
+            .andExpect(jsonPath("$._embedded.products[0].category").value("PCS"))
+
+            .andExpect(jsonPath("$.page.size").value(20))
+            .andExpect(jsonPath("$.page.totalElements").value(2))
+            .andExpect(jsonPath("$.page.totalPages").value(1))
+            .andExpect(jsonPath("$.page.number").value(0))
+
+            .andExpect(jsonPath("$._links.first").doesNotExist())
+            .andExpect(jsonPath("$._links.prev").doesNotExist())
+            .andExpect(jsonPath("$._links.next").doesNotExist())
+            .andExpect(jsonPath("$._links.last").doesNotExist());
+    }
+
+    @Test
+    public void shouldListProductsPaginated() throws Exception {
+        mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        mockMVC
+            .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_WITH_DESCRIPTION_PAYLOAD))
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        mockMVC
+            .perform(get(PRODUCT_URL + "?page=1&size=1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.products").isArray())
+            .andExpect(jsonPath("$._embedded.products[0].name").exists())
+            .andExpect(jsonPath("$._embedded.products[0].description").hasJsonPath())
+            .andExpect(jsonPath("$._embedded.products[0].price").exists())
+            .andExpect(jsonPath("$._embedded.products[0].currency").exists())
+            .andExpect(jsonPath("$._embedded.products[0].category").exists())
+
+            .andExpect(jsonPath("$.page.size").value(1))
+            .andExpect(jsonPath("$.page.totalElements").value(2))
+            .andExpect(jsonPath("$.page.totalPages").value(2))
+            .andExpect(jsonPath("$.page.number").value(1))
+
+            .andExpect(jsonPath("$._links.first").exists())
+            .andExpect(jsonPath("$._links.prev").exists())
+            .andExpect(jsonPath("$._links.last").exists());
+    }
+
+    @Test
     public void shouldRetrieveProduct() throws Exception {
         var mvcResult = mockMVC
             .perform(post(PRODUCT_URL).content(CREATE_PRODUCT_PAYLOAD))
