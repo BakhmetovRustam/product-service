@@ -1,0 +1,25 @@
+spring:
+  application.name: @project.artifactId@
+  http:
+    encoding.charset: @project.build.sourceEncoding@
+    encoding.enabled: true
+    encoding.force: true
+  resources.add-mappings: false
+  mvc.throw-exception-if-no-handler-found: true
+  main:
+    banner-mode: 'off'
+    allow-bean-definition-overriding: true
+
+management:
+  endpoint.health.enabled: true
+  endpoints:
+    enabled-by-default: false
+    web.exposure.include: health
+
+server:
+  servlet:
+    context-path: /
+    encoding:
+      charset: @project.build.sourceEncoding@
+      enabled: true
+      force: true
