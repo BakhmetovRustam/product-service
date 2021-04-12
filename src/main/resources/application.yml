@@ -1,5 +1,7 @@
 spring:
   application.name: @project.artifactId@
+  data.rest:
+    basePath: /api
   datasource:
     url: jdbc:postgresql://localhost:6543/@project.artifactId@
     username: postgres

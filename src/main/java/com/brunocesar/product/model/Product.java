@@ -1,5 +1,6 @@
 package com.brunocesar.product.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -59,6 +60,7 @@ public class Product implements Persistable<Long> {
     }
 
     @Override
+    @JsonIgnore
     public boolean isNew() {
         return getId() == null;
     }
