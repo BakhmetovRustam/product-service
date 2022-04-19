@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:17-slim
 
 COPY target/product-service.jar /product-service.jar
 
