@@ -6,11 +6,6 @@ spring:
     url: jdbc:postgresql://db:5432/@project.artifactId@
     username: postgres
     password: postgres
-  http:
-    encoding.charset: @project.build.sourceEncoding@
-    encoding.enabled: true
-    encoding.force: true
-  resources.add-mappings: false
   mvc.throw-exception-if-no-handler-found: true
   flyway:
     enabled: true
@@ -24,6 +19,9 @@ spring:
   main:
     banner-mode: 'off'
     allow-bean-definition-overriding: true
+  web:
+    resources:
+      add-mappings: false
 
 management:
   endpoint.health.enabled: true
