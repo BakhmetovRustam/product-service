@@ -1,2 +1,5 @@
 *
-!target/product-service.jar
+!.mvn
+!src
+!mvnw
+!pom.xml

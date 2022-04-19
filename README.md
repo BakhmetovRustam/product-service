@@ -10,10 +10,10 @@ This project is a simple REST application for serving a simple Product API. Writ
 The easy way to get the API running is using docker with the provided docker compose. Run the following to get it all set up:
 
 ```shell
-./mvnw clean package && docker compose up -d
+docker compose up -d
 
 # or if you're using docker < 20.10.0
-./mvnw clean package && docker-compose up -d
+docker-compose up -d
 ```
 
 ## API Endpoints
